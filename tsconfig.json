@@ -5,9 +5,12 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
+    "strictPropertyInitialization": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "emitDecoratorMetadata":true,
+    "experimentalDecorators":true,
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
