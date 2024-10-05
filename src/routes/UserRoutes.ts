@@ -10,7 +10,7 @@ const Joi = BaseJoi.extend(joiDate as unknown as Extension) as Root;
 const userRoutes = express.Router();
 const userController = new UserController();
 
-//list all users
+
 userRoutes.get(
   "/user",
   userController.index
