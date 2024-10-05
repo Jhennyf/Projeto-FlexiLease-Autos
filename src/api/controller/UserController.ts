@@ -1,50 +1,58 @@
-import { Request, Response } from "express";
-import { instanceToInstance } from "class-transformer";
+import { Request, Response } from 'express';
+import { instanceToInstance } from 'class-transformer';
 
-import CreateUserService from "../services/User/CreateUserSerivce";
-import ListUserService from "../services/User/ListUserService";
-import ShowUserService from "../services/User/ShowUserSErvice";
-import UpdateUserService from "../services/User/UpdateUserService";
-import DeleteUserService from "../services/User/DeleteUserService";
+import CreateUserService from '../services/User/CreateUserSerivce';
+import ListUserService from '../services/User/ListUserService';
+import ShowUserService from '../services/User/ShowUserSErvice';
+import UpdateUserService from '../services/User/UpdateUserService';
+import DeleteUserService from '../services/User/DeleteUserService';
+import { UserDTO } from '../dto/UserDTO';
+import { plainToClass } from 'class-transformer';
+import { validateOrReject } from 'class-validator';
 
+export default class UserController {
+  public async create(req: Request, res: Response): Promise<void> {
+    try {
+      const { name, cpf, birth, cep, email, password } = req.body;
 
- export default class UserController {
-  // Create a new user
-  public async  create(req: Request, res: Response): Promise<Response> {
-    const { name, cpf, birth, cep, email, password } = req.body;
+      const UserService = new CreateUserService();
 
-    const UserService = new CreateUserService();
-    const user = await UserService.execute({
-      name,
-      cpf,
-      birth,
-      cep,
-      email,
-      password
-    });
+      const createUserDto = plainToClass(UserDTO, req.body);
 
-    return res.status(201).json(instanceToInstance(user));
+      await validateOrReject(createUserDto);
+
+      const user = await UserService.execute({
+        name,
+        cpf,
+        birth,
+        cep,
+        email,
+        password,
+      });
+
+      res.status(201).json(instanceToInstance(user));
+    } catch (errors) {
+      res.status(400).json({ errors });
+    }
   }
 
-  // List all users
-  public async index(req: Request, res: Response): Promise<Response> {
+  public async index(req: Request, res: Response): Promise<void> {
     const UserService = new ListUserService();
     const users = await UserService.execute();
 
-    return res.json(instanceToInstance(users));
+    res.json(instanceToInstance(users));
   }
 
-  // Show a user
-  public async show(req: Request, res: Response): Promise<Response> {
+  public async show(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
 
     const UserService = new ShowUserService();
     const user = await UserService.execute({ id: Number(id) });
 
-    return res.json(instanceToInstance(user));
+    res.json(instanceToInstance(user));
   }
 
-  public async update(req: Request, res: Response): Promise<Response> {
+  public async update(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
     const { name, cpf, birth, cep, email, password } = req.body;
 
@@ -56,19 +64,18 @@ import DeleteUserService from "../services/User/DeleteUserService";
       birth,
       cep,
       email,
-      password
+      password,
     });
 
-    return res.json(instanceToInstance(user));
+    res.json(instanceToInstance(user));
   }
 
-  public async delete(req: Request, res: Response): Promise<Response> {
+  public async delete(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
 
     const UserService = new DeleteUserService();
     await UserService.execute({ id: Number(id) });
 
-    return res.status(204).send();
+    res.status(204).send();
   }
-
- }
+}

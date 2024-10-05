@@ -1,7 +1,6 @@
 import { IsNumber, IsString } from 'class-validator';
 
-
-export class CarDTO{
+export class CarDTO {
   @IsString()
   model: string;
 
