@@ -1,49 +1,49 @@
-import { Request, Response } from "express";
-import { instanceToInstance } from "class-transformer";
+import { Request, Response } from 'express';
+import { instanceToInstance } from 'class-transformer';
 
-import CreateCarService from "../services/Car/CreateCarService";
-import ListCarService from "../services/Car/ListCarService";
-import ShowCarService from "../services/Car/ShowCarService";
-import UpdateCarService from "../services/Car/UpdateCarService";
-import DeleteCarService from "../services/Car/DeleteCarService";
-
+import CreateCarService from '../services/Car/CreateCarService';
+import ListCarService from '../services/Car/ListCarService';
+import ShowCarService from '../services/Car/ShowCarService';
+import UpdateCarService from '../services/Car/UpdateCarService';
+import DeleteCarService from '../services/Car/DeleteCarService';
+import { CarDTO } from '../dto/CarDTO';
+import { plainToClass } from 'class-transformer';
+import { validateOrReject } from 'class-validator';
 
 export default class CarController {
-  // Create a new car
-  public async create(req: Request, res: Response): Promise<Response> {
-    const { model, color, year, valuePerDay, numberOfPassengers } = req.body;
+  public async create(req: Request, res: Response): Promise<void> {
+    try {
+      const createCarDto = plainToClass(CarDTO, req.body);
+      await validateOrReject(createCarDto);
 
-    const CarService = new CreateCarService();
-    const car = await CarService.execute({
-      model,
-      color,
-      year,
-      valuePerDay,
-      numberOfPassengers
-    });
+      const createCarService = new CreateCarService();
+      const car = await createCarService.execute(req.body);
 
-    return res.status(201).json(instanceToInstance(car));
+      res.status(201).json(car);
+    } catch (errors) {
+      res.status(400).json({ errors });
+    }
   }
 
-  // List all cars
-  public async index(req: Request, res: Response): Promise<Response> {
+  public async index(req: Request, res: Response): Promise<void> {
+    const query = req.query;
+
     const CarService = new ListCarService();
-    const cars = await CarService.execute();
+    const cars = await CarService.execute(query);
 
-    return res.json(instanceToInstance(cars));
+    res.json(instanceToInstance(cars));
   }
 
-  // Show a car
-  public async show(req: Request, res: Response): Promise<Response> {
+  public async show(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
 
     const CarService = new ShowCarService();
     const car = await CarService.execute({ id: Number(id) });
 
-    return res.json(instanceToInstance(car));
+    res.json(instanceToInstance(car));
   }
 
-  public async update(req: Request, res: Response): Promise<Response> {
+  public async update(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
     const { model, color, year, valuePerDay, numberOfPassengers } = req.body;
 
@@ -54,18 +54,22 @@ export default class CarController {
       color,
       year,
       valuePerDay,
-      numberOfPassengers
+      numberOfPassengers,
     });
 
-    return res.json(instanceToInstance(car));
+    res.json(instanceToInstance(car));
   }
 
-  public async delete(req: Request, res: Response): Promise<Response> {
-    const { id } = req.params;
+  public async delete(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
 
-    const CarService = new DeleteCarService();
-    await CarService.execute({ id: Number(id) });
+      const deleteCarService = new DeleteCarService();
+      await deleteCarService.execute({ id: Number(id) });
 
-    return res.status(204).send();
+      res.status(204).send();
+    } catch (error) {
+      res.status(400).json({ error });
+    }
   }
 }
