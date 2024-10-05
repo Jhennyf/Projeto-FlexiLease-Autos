@@ -38,6 +38,31 @@ export class CreateUser1727892718101 implements MigrationInterface {
             type: 'varchar',
           },
           {
+            name: 'qualified',
+            type: 'boolean',
+            default: false,
+          },
+          {
+            name: 'neighbordhood',
+            type: 'varchar',
+          },
+          {
+            name: 'street',
+            type: 'varchar',
+          },
+          {
+            name: 'complement',
+            type: 'varchar',
+          },
+          {
+            name: 'city',
+            type: 'varchar',
+          },
+          {
+            name: 'uf',
+            type: 'varchar',
+          },
+          {
             name: 'created_at',
             type: 'timestamp',
             default: 'CURRENT_TIMESTAMP',
@@ -50,9 +75,11 @@ export class CreateUser1727892718101 implements MigrationInterface {
         ],
       }),
     );
+
+    await queryRunner.query(`UPDATE "user" SET "qualified" = false WHERE "qualified" IS NULL`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('user'); // Corrigir o nome da tabela
+    await queryRunner.dropTable('user');
   }
 }

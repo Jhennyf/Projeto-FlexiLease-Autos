@@ -32,6 +32,24 @@ export class User {
   @Column()
   password: string;
 
+  @Column()
+  qualified: boolean;
+
+  @Column()
+  neighbordhood: string;
+
+  @Column()
+  street: string;
+
+  @Column()
+  complement: string;
+
+  @Column()
+  city: string;
+
+  @Column()
+  uf: string;
+
   @OneToMany(() => Reserve, reserve => reserve.user)
   reserves: Reserve[];
 
