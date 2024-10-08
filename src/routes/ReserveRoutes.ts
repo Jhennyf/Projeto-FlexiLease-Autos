@@ -6,34 +6,39 @@ import authMiddleware from '../api/middlewars/authMiddleware';
 
 const reserveRoutes = Router();
 const reserveController = new ReserveController();
+
 reserveRoutes.use(authMiddleware);
 
-reserveRoutes.get('/reserve', reserveController.index);
+reserveRoutes.get(
+  "/reserve",
+  reserveController.index
+);
 
 reserveRoutes.get(
-  '/reserve/:id',
+  "/reserve/:id",
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.number().required(),
     },
   }),
-  reserveController.show,
+  reserveController.show
 );
 
 reserveRoutes.post(
-  '/reserve',
+  "/reserve",
   celebrate({
     [Segments.BODY]: {
       startDate: Joi.date().required(),
       endDate: Joi.date().required(),
-      carId: Joi.number().required(),
+      user_id: Joi.number().required(),
+      car_id: Joi.number().required(),
     },
   }),
-  reserveController.create,
+  reserveController.create
 );
 
 reserveRoutes.put(
-  '/reserve/:id',
+  "/reserve/:id",
   celebrate({
     [Segments.BODY]: {
       startDate: Joi.date().required(),
@@ -45,17 +50,17 @@ reserveRoutes.put(
       id: Joi.number().integer().required(),
     },
   }),
-  reserveController.update,
+  reserveController.update
 );
 
 reserveRoutes.delete(
-  '/reserve/:id',
+  "/reserve/:id",
   celebrate({
     [Segments.PARAMS]: {
       id: Joi.number().integer().required(),
     },
   }),
-  reserveController.delete,
+  reserveController.delete
 );
 
 export default reserveRoutes;
