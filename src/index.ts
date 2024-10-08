@@ -9,6 +9,7 @@ import userRoutes from "./routes/UserRoutes";
 import carRoutes from './routes/CarRoutes';
 import reserveRoutes from './routes/ReserveRoutes';
 import AppError from "../src/api/middlewars/AppError";
+import { setupSwagger } from "./swagger";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ const port = process.env.PORT || 3001;
 
 
 app.use(bodyParser.json());
+setupSwagger(app);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

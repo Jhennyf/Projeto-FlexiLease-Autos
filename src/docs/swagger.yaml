@@ -1,0 +1,376 @@
+openapi: 3.0.0
+info:
+  title: Projeto FlexiLease Autos API
+  version: 1.0.0
+  description: Documentação da API do Projeto FlexiLease Autos
+servers:
+  - url: http://localhost:3001/v1
+paths:
+  /user:
+    get:
+      summary: Lista todos os usuários
+      tags: [Users]
+      responses:
+        200:
+          description: Lista de usuários
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Cria um novo usuário
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        201:
+          description: Usuário criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        400:
+          description: Dados inválidos
+  /user/{id}:
+    get:
+      summary: Obtém um usuário pelo ID
+      tags: [Users]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do usuário
+      responses:
+        200:
+          description: Usuário encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        404:
+          description: Usuário não encontrado
+    put:
+      summary: Atualiza um usuário pelo ID
+      tags: [Users]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        200:
+          description: Usuário atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        400:
+          description: Dados inválidos
+    delete:
+      summary: Deleta um usuário pelo ID
+      tags: [Users]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do usuário
+      responses:
+        204:
+          description: Usuário deletado com sucesso
+        400:
+          description: Dados inválidos
+  /auth:
+    post:
+      summary: Autentica um usuário
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: Autenticação bem-sucedida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+        400:
+          description: Credenciais inválidas
+  /car:
+    get:
+      summary: Lista todos os carros
+      tags: [Cars]
+      responses:
+        200:
+          description: Lista de carros
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Car'
+    post:
+      summary: Cria um novo carro
+      tags: [Cars]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Car'
+      responses:
+        201:
+          description: Carro criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+        400:
+          description: Dados inválidos
+  /car/{id}:
+    get:
+      summary: Obtém um carro pelo ID
+      tags: [Cars]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do carro
+      responses:
+        200:
+          description: Carro encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+        404:
+          description: Carro não encontrado
+    put:
+      summary: Atualiza um carro pelo ID
+      tags: [Cars]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do carro
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Car'
+      responses:
+        200:
+          description: Carro atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+        400:
+          description: Dados inválidos
+    delete:
+      summary: Deleta um carro pelo ID
+      tags: [Cars]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID do carro
+      responses:
+        204:
+          description: Carro deletado com sucesso
+        400:
+          description: Dados inválidos
+  /reserve:
+    get:
+      summary: Lista todas as reservas
+      tags: [Reserves]
+      responses:
+        200:
+          description: Lista de reservas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Reserve'
+    post:
+      summary: Cria uma nova reserva
+      tags: [Reserves]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reserve'
+      responses:
+        201:
+          description: Reserva criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reserve'
+        400:
+          description: Dados inválidos
+  /reserve/{id}:
+    get:
+      summary: Obtém uma reserva pelo ID
+      tags: [Reserves]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID da reserva
+      responses:
+        200:
+          description: Reserva encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reserve'
+        404:
+          description: Reserva não encontrada
+    put:
+      summary: Atualiza uma reserva pelo ID
+      tags: [Reserves]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID da reserva
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reserve'
+      responses:
+        200:
+          description: Reserva atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reserve'
+        400:
+          description: Dados inválidos
+    delete:
+      summary: Deleta uma reserva pelo ID
+      tags: [Reserves]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID da reserva
+      responses:
+        204:
+          description: Reserva deletada com sucesso
+        400:
+          description: Dados inválidos
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID do usuário
+        name:
+          type: string
+          description: Nome do usuário
+        cpf:
+          type: string
+          description: CPF do usuário
+        birth:
+          type: string
+          format: date
+          description: Data de nascimento do usuário
+        cep:
+          type: string
+          description: CEP do usuário
+        email:
+          type: string
+          description: Email do usuário
+        password:
+          type: string
+          description: Senha do usuário
+    Car:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID do carro
+        model:
+          type: string
+          description: Modelo do carro
+        color:
+          type: string
+          description: Cor do carro
+        year:
+          type: integer
+          description: Ano do carro
+        valuePerDay:
+          type: number
+          description: Valor por dia do carro
+        numberOfPassengers:
+          type: integer
+          description: Número de passageiros do carro
+    Reserve:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID da reserva
+        startDate:
+          type: string
+          format: date
+          description: Data de início da reserva
+        endDate:
+          type: string
+          format: date
+          description: Data de término da reserva
+        user_id:
+          type: integer
+          description: ID do usuário
+        car_id:
+          type: integer
+          description: ID do carro
