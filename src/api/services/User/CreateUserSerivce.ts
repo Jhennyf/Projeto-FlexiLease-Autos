@@ -28,12 +28,33 @@ class CreateUserService {
     });
 
     if (userExists) {
-      throw new AppError('User already registered.', 400);
+      throw new AppError('User registered.', 400);
+    }
+
+    if (password.length < 6) {
+      throw new AppError('Password at 6 characters.', 400);
+    }
+
+    if (!this.isAdult(birth)) {
+      throw new AppError('User must be at least 18 years old.', 400);
+    }
+
+
+    if (cpf.length !== 14) {
+      throw new AppError('CPF Invalid.', 400);
+    }
+
+    const emailExists = await userRepository.findOne({
+      where: { email },
+    });
+
+    if (emailExists) {
+      throw new AppError('Email registered.', 400);
     }
 
     const cepData = await this.consultarCEP(cep);
     if (!cepData) {
-      throw new AppError('Invalid CEP.', 400);
+      throw new AppError('CEP Invalid.', 400);
     }
 
     const user = userRepository.create({
@@ -65,20 +86,30 @@ class CreateUserService {
       );
 
       if (response.data.erro) {
-        console.log('CEP não encontrado.');
+        console.log('CEP not found.');
         return null;
       }
 
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error('Erro na requisição:', error.message);
+        console.error('Request error:', error.message);
       } else {
-        console.error('Erro desconhecido:', error);
+        console.error('Error', error);
       }
       return null;
     }
   }
+
+
+
+  private isAdult(birth: Date): boolean {
+    const currentYear = 2024;
+    const birthYear = birth.getFullYear();
+    const age = currentYear - birthYear;
+
+    return age >= 18;
+    }
 }
 
 export default CreateUserService;
