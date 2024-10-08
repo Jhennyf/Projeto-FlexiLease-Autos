@@ -7,14 +7,30 @@ import ShowReserveService from '../services/Reserve/ShowReserveService';
 import UpdateReserveService from '../services/Reserve/UpdateReserveService';
 import DeleteReserveService from '../services/Reserve/DeleteReserveService';
 
+
 export default class ReserveController {
   public async create(req: Request, res: Response): Promise<void> {
-    const { startDate, endDate, carId, userId } = req.body;
+    const { startDate, endDate, carId } = req.body;
+    const userId = req.user.id;
 
     const ReserveService = new CreateReserveService();
-    const reserve = await ReserveService.execute(req.body);
+    const reserve = await ReserveService.execute({
+      startDate,
+      endDate,
+      userId,
+      carId,
+    });
 
-    res.status(201).json(instanceToInstance(reserve));
+    res.status(201).json(
+      instanceToInstance({
+        id: reserve.id,
+        startDate: reserve.startDate,
+        endDate: reserve.endDate,
+        finalValue: reserve.finalValue,
+        userId: reserve.user.id,
+        carId: reserve.car.id,
+      }),
+    );
   }
 
   public async index(req: Request, res: Response): Promise<void> {
