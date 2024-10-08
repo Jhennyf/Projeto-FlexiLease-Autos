@@ -6,7 +6,7 @@ class ListReserveService {
       const reserveRepository = AppDataSource.getRepository(Reserve);
 
       const reserves = await reserveRepository.find({
-        relations: ["car", "user"],
+
       });
 
       return reserves;

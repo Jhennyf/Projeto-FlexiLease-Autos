@@ -3,7 +3,6 @@ import { AppDataSource } from "@/database";
 import AppError from "@/api/middlewars/AppError";
 import { User } from "@database/entities/users";
 import { Car } from "@/database/entities/cars";
-import { LessThanOrEqual } from "typeorm";
 
 interface IRequest {
   startDate: string;
