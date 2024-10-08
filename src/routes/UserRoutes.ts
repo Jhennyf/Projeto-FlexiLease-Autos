@@ -3,6 +3,7 @@ import { celebrate, Segments } from 'celebrate';
 import UserController from '@/api/controller/UserController';
 import BaseJoi, { Extension, Root } from 'joi';
 import joiDate from '@joi/date';
+import AuthController from '@/api/controller/AuthController';
 
 const Joi = BaseJoi.extend(joiDate as unknown as Extension) as Root;
 
@@ -10,6 +11,7 @@ const Joi = BaseJoi.extend(joiDate as unknown as Extension) as Root;
 const userRoutes = express.Router();
 const userController = new UserController();
 
+const authController = new AuthController();
 
 userRoutes.get(
   "/user",
@@ -69,5 +71,17 @@ userRoutes.delete(
   }),
   userController.delete
 );
+
+userRoutes.post(
+  '/auth',
+  celebrate({
+    [Segments.BODY]: {
+      email: Joi.string().email().required(),
+      password: Joi.string().required(),
+    },
+  }),
+  authController.login,
+);
+
 
 export default userRoutes;
