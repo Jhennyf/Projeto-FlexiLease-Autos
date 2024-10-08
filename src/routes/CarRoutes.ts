@@ -3,10 +3,12 @@ import { celebrate, Segments } from 'celebrate';
 import CarController from '@/api/controller/CarController';
 import BaseJoi, { Extension, Root } from 'joi';
 import joiDate from '@joi/date';
+import authMiddleware from '@/api/middlewars/authMiddleware';
 
 const Joi = BaseJoi.extend(joiDate as unknown as Extension) as Root;
 
 const carRoutes = express.Router();
+carRoutes.use(authMiddleware);
 const carController = new CarController();
 
 carRoutes.get(
